@@ -170,6 +170,7 @@ function App() {
     const [canRollOneDice, setCanRollOneDice] = useState(false);
     const [openLoser, setOpenLoser] = useState(false);
     const [openWinner, setOpenWinner] = useState(false);
+    const [finalScore, setFinalScore] = useState(0);
 
     // State Helper
     const setNumberSelected = (number) => {
@@ -181,6 +182,17 @@ function App() {
         }
         setTiles(newTiles);
     }
+
+    const calculateFinalScore = (tiles) => {
+        let total = 0;
+        for(let tile of tiles){
+            if(!tile.selected){
+                total += tile.number;
+            }
+        }
+        return total;
+    }
+
 
     const resetGame = () => {
         setTiles([
@@ -220,6 +232,7 @@ function App() {
         setLastItemsPicked([])
         setNumLeftInTurn(0);
         setCanRollOneDice(false);
+        setFinalScore(0);
     }
 
 
@@ -284,6 +297,8 @@ function App() {
         }else if(status === 'winner'){
             setOpenWinner(true);
         }else if(status === 'loser'){
+            // Calculate final score
+            setFinalScore(calculateFinalScore(tiles));
             setOpenLoser(true);
         }
     }
@@ -377,6 +392,9 @@ function App() {
               <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                       Try Again Next Time!
+                  </DialogContentText>
+                  <DialogContentText id="alert-dialog-description">
+                      Final Score: {finalScore}
                   </DialogContentText>
               </DialogContent>
               <DialogActions>
